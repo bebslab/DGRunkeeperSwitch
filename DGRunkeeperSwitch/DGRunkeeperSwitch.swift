@@ -83,8 +83,8 @@ public class DGRunkeeperSwitch: UIControl {
     public var rightTitleLabel = UILabel()
     
     private var selectedTitleLabelsContentView = UIView()
-    private var selectedLeftTitleLabel = UILabel()
-    private var selectedRightTitleLabel = UILabel()
+    public var selectedLeftTitleLabel = UILabel()
+    public var selectedRightTitleLabel = UILabel()
     
     private(set) var selectedBackgroundView = UIView()
     
