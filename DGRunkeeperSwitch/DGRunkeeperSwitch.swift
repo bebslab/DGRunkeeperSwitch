@@ -79,8 +79,8 @@ public class DGRunkeeperSwitch: UIControl {
     // MARK: Private vars
     
     private var titleLabelsContentView = UIView()
-    private var leftTitleLabel = UILabel()
-    private var rightTitleLabel = UILabel()
+    public var leftTitleLabel = UILabel()
+    public var rightTitleLabel = UILabel()
     
     private var selectedTitleLabelsContentView = UIView()
     private var selectedLeftTitleLabel = UILabel()
