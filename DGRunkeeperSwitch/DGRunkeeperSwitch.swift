@@ -62,18 +62,18 @@ public class DGRunkeeperSwitch: UIControl {
     
     @IBInspectable
     public var titleColor: UIColor! {
-        set { (leftTitleLabel.textColor, rightTitleLabel.textColor, centerTitleLabel.textColor) = (newValue, newValue, newValue) }
+        set { (leftTitleLabel.textColor, centerTitleLabel.textColor, rightTitleLabel.textColor) = (newValue, newValue, newValue) }
         get { return leftTitleLabel.textColor }
     }
     
     @IBInspectable
     public var selectedTitleColor: UIColor! {
-        set { (selectedLeftTitleLabel.textColor, selectedRightTitleLabel.textColor, selectedCenterTitleLabel.textColor) = (newValue, newValue, newValue) }
+        set { (selectedLeftTitleLabel.textColor, selectedCenterTitleLabel.textColor, selectedRightTitleLabel.textColor) = (newValue, newValue, newValue) }
         get { return selectedLeftTitleLabel.textColor }
     }
     
     public var titleFont: UIFont! {
-        set { (leftTitleLabel.font, rightTitleLabel.font, selectedLeftTitleLabel.font, selectedRightTitleLabel.font, selectedCenterTitleLabel.font) = (newValue, newValue, newValue, newValue, newValue) }
+        set { (leftTitleLabel.font, centerTitleLabel.font, rightTitleLabel.font, selectedLeftTitleLabel.font, selectedCenterTitleLabel.font, selectedRightTitleLabel.font) = (newValue, newValue, newValue, newValue, newValue, newValue) }
         get { return leftTitleLabel.font }
     }
     
@@ -110,43 +110,44 @@ public class DGRunkeeperSwitch: UIControl {
         super.init(frame: CGRect.zero)
         
         self.leftTitle = leftTitle
-        self.rightTitle = rightTitle
         self.centerTitle = centerTitle
-        
-        
+        self.rightTitle = rightTitle
         finishInit()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
         finishInit()
     }
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        
         finishInit()
     }
     
     private func finishInit() {
         // Setup views
-        (leftTitleLabel.lineBreakMode, rightTitleLabel.lineBreakMode, centerTitleLabel.lineBreakMode) = (.ByTruncatingTail, .ByTruncatingTail, .ByTruncatingTail)
+        (leftTitleLabel.lineBreakMode, centerTitleLabel.lineBreakMode, rightTitleLabel.lineBreakMode) = (.ByTruncatingTail, .ByTruncatingTail, .ByTruncatingTail)
         
         titleLabelsContentView.addSubview(leftTitleLabel)
-        titleLabelsContentView.addSubview(rightTitleLabel)
         titleLabelsContentView.addSubview(centerTitleLabel)
+        titleLabelsContentView.addSubview(rightTitleLabel)
+        
+        
+        
         addSubview(titleLabelsContentView)
         
         object_setClass(selectedBackgroundView.layer, DGRunkeeperSwitchRoundedLayer.self)
         addSubview(selectedBackgroundView)
         
         selectedTitleLabelsContentView.addSubview(selectedLeftTitleLabel)
-        selectedTitleLabelsContentView.addSubview(selectedRightTitleLabel)
         selectedTitleLabelsContentView.addSubview(selectedCenterTitleLabel)
+        selectedTitleLabelsContentView.addSubview(selectedRightTitleLabel)
         addSubview(selectedTitleLabelsContentView)
         
-        (leftTitleLabel.textAlignment, rightTitleLabel.textAlignment, centerTitleLabel.textAlignment, selectedLeftTitleLabel.textAlignment, selectedRightTitleLabel.textAlignment, selectedCenterTitleLabel.textAlignment) = (.Center, .Center, .Center, .Center, .Center, .Center)
+        (leftTitleLabel.textAlignment, centerTitleLabel.textAlignment, rightTitleLabel.textAlignment, selectedLeftTitleLabel.textAlignment, selectedCenterTitleLabel.textAlignment, selectedRightTitleLabel.textAlignment) = (.Center, .Center, .Center, .Center, .Center, .Center)
+        
+        (leftTitleLabel.font, centerTitleLabel.font, rightTitleLabel.font, selectedLeftTitleLabel.font, selectedCenterTitleLabel.font, selectedRightTitleLabel.font) = (leftTitleLabel.font.fontWithSize(9), centerTitleLabel.font.fontWithSize(9), rightTitleLabel.font.fontWithSize(9), selectedLeftTitleLabel.font.fontWithSize(9), selectedCenterTitleLabel.font.fontWithSize(9), selectedRightTitleLabel.font.fontWithSize(9))
         
         object_setClass(titleMaskView.layer, DGRunkeeperSwitchRoundedLayer.self)
         titleMaskView.backgroundColor = .blackColor()
@@ -265,16 +266,9 @@ public class DGRunkeeperSwitch: UIControl {
         var leftTitleLabelSize = leftTitleLabel.sizeThatFits(CGSize(width: titleLabelMaxWidth, height: titleLabelMaxHeight))
         leftTitleLabelSize.width = min(leftTitleLabelSize.width, titleLabelMaxWidth)
         
-        let leftTitleLabelOrigin = CGPoint(x: floor((bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0), y: floor((bounds.height - leftTitleLabelSize.height) / 3.0))
+        let leftTitleLabelOrigin = CGPoint(x: floor((bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0), y: floor((bounds.height - leftTitleLabelSize.height) / 2.0))
         let leftTitleLabelFrame = CGRect(origin: leftTitleLabelOrigin, size: leftTitleLabelSize)
         (leftTitleLabel.frame, selectedLeftTitleLabel.frame) = (leftTitleLabelFrame, leftTitleLabelFrame)
-        
-        var rightTitleLabelSize = rightTitleLabel.sizeThatFits(CGSize(width: titleLabelMaxWidth, height: titleLabelMaxHeight))
-        rightTitleLabelSize.width = min(rightTitleLabelSize.width, titleLabelMaxWidth)
-        
-        let rightTitleLabelOrigin = CGPoint(x: floor(bounds.size.width / 3.0 + (bounds.width / 3.0 - rightTitleLabelSize.width) / 3.0), y: floor((bounds.height - rightTitleLabelSize.height) / 3.0))
-        let rightTitleLabelFrame = CGRect(origin: rightTitleLabelOrigin, size: rightTitleLabelSize)
-        (rightTitleLabel.frame, selectedRightTitleLabel.frame) = (rightTitleLabelFrame, rightTitleLabelFrame)
         
         var centerTitleLabelSize = centerTitleLabel.sizeThatFits(CGSize(width: titleLabelMaxWidth, height: titleLabelMaxHeight))
         centerTitleLabelSize.width = min(centerTitleLabelSize.width, titleLabelMaxWidth)
@@ -283,9 +277,18 @@ public class DGRunkeeperSwitch: UIControl {
         let x2 = bounds.size.width / 3.0 + (bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0
         let x = x1 + x2
         
-        let centerTitleLabelOrigin = CGPoint(x: floor(x), y: floor((bounds.height - centerTitleLabelSize.height) / 3.0))
+        let centerTitleLabelOrigin = CGPoint(x: floor(x), y: floor((bounds.height - centerTitleLabelSize.height) / 2.0))
         let centerTitleLabelFrame = CGRect(origin: centerTitleLabelOrigin, size: centerTitleLabelSize)
         (centerTitleLabel.frame, selectedCenterTitleLabel.frame) = (centerTitleLabelFrame, centerTitleLabelFrame)
+        
+        var rightTitleLabelSize = rightTitleLabel.sizeThatFits(CGSize(width: titleLabelMaxWidth, height: titleLabelMaxHeight))
+        rightTitleLabelSize.width = min(rightTitleLabelSize.width, titleLabelMaxWidth)
+        
+        let rightTitleLabelOrigin = CGPoint(x: floor(bounds.size.width / 3.0 + (bounds.width / 3.0 - rightTitleLabelSize.width) / 3.0), y: floor((bounds.height - rightTitleLabelSize.height) / 2.0))
+        let rightTitleLabelFrame = CGRect(origin: rightTitleLabelOrigin, size: rightTitleLabelSize)
+        (rightTitleLabel.frame, selectedRightTitleLabel.frame) = (rightTitleLabelFrame, rightTitleLabelFrame)
+        
+        
     }
     
 }
