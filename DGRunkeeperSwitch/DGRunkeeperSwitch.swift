@@ -112,16 +112,20 @@ public class DGRunkeeperSwitch: UIControl {
         self.leftTitle = leftTitle
         self.centerTitle = centerTitle
         self.rightTitle = rightTitle
+        
+        
         finishInit()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
         finishInit()
     }
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
+        
         finishInit()
     }
     
@@ -132,9 +136,6 @@ public class DGRunkeeperSwitch: UIControl {
         titleLabelsContentView.addSubview(leftTitleLabel)
         titleLabelsContentView.addSubview(centerTitleLabel)
         titleLabelsContentView.addSubview(rightTitleLabel)
-        
-        
-        
         addSubview(titleLabelsContentView)
         
         object_setClass(selectedBackgroundView.layer, DGRunkeeperSwitchRoundedLayer.self)
@@ -145,9 +146,9 @@ public class DGRunkeeperSwitch: UIControl {
         selectedTitleLabelsContentView.addSubview(selectedRightTitleLabel)
         addSubview(selectedTitleLabelsContentView)
         
-        (leftTitleLabel.textAlignment, centerTitleLabel.textAlignment, rightTitleLabel.textAlignment, selectedLeftTitleLabel.textAlignment, selectedCenterTitleLabel.textAlignment, selectedRightTitleLabel.textAlignment) = (.Center, .Center, .Center, .Center, .Center, .Center)
+        (leftTitleLabel.textAlignment, rightTitleLabel.textAlignment, centerTitleLabel.textAlignment, selectedLeftTitleLabel.textAlignment, selectedRightTitleLabel.textAlignment, selectedCenterTitleLabel.textAlignment) = (.Center, .Center, .Center, .Center, .Center, .Center)
         
-        (leftTitleLabel.font, centerTitleLabel.font, rightTitleLabel.font, selectedLeftTitleLabel.font, selectedCenterTitleLabel.font, selectedRightTitleLabel.font) = (leftTitleLabel.font.fontWithSize(9), centerTitleLabel.font.fontWithSize(9), rightTitleLabel.font.fontWithSize(9), selectedLeftTitleLabel.font.fontWithSize(9), selectedCenterTitleLabel.font.fontWithSize(9), selectedRightTitleLabel.font.fontWithSize(9))
+        (leftTitleLabel.font, rightTitleLabel.font, centerTitleLabel.font, selectedLeftTitleLabel.font, selectedRightTitleLabel.font, selectedCenterTitleLabel.font) = (leftTitleLabel.font.fontWithSize(8), rightTitleLabel.font.fontWithSize(8), centerTitleLabel.font.fontWithSize(8), selectedLeftTitleLabel.font.fontWithSize(8), selectedRightTitleLabel.font.fontWithSize(8), selectedCenterTitleLabel.font.fontWithSize(8))
         
         object_setClass(titleMaskView.layer, DGRunkeeperSwitchRoundedLayer.self)
         titleMaskView.backgroundColor = .blackColor()
@@ -160,10 +161,10 @@ public class DGRunkeeperSwitch: UIControl {
         selectedTitleColor = .blackColor()
         
         // Gestures
-        tapGesture = UITapGestureRecognizer(target: self, action: "tapped:")
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(DGRunkeeperSwitch.tapped(_:)))
         addGestureRecognizer(tapGesture)
         
-        panGesture = UIPanGestureRecognizer(target: self, action: "pan:")
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(DGRunkeeperSwitch.pan(_:)))
         panGesture.delegate = self
         addGestureRecognizer(panGesture)
         
@@ -255,8 +256,8 @@ public class DGRunkeeperSwitch: UIControl {
     override public func layoutSubviews() {
         super.layoutSubviews()
         
-        let selectedBackgroundWidth = bounds.width / 3.0 - selectedBackgroundInset * 3.0
-        selectedBackgroundView.frame = CGRect(x: selectedBackgroundInset + CGFloat(selectedIndex) * (selectedBackgroundWidth + selectedBackgroundInset * 3.0), y: selectedBackgroundInset, width: selectedBackgroundWidth, height: bounds.height - selectedBackgroundInset * 3.0)
+        let selectedBackgroundWidth = bounds.width / 3.0 - selectedBackgroundInset * 3.0 + 2
+        selectedBackgroundView.frame = CGRect(x: selectedBackgroundInset + CGFloat(selectedIndex) * (selectedBackgroundWidth + selectedBackgroundInset * 3.0), y: selectedBackgroundInset + 1, width: selectedBackgroundWidth, height: bounds.height - selectedBackgroundInset * 3.0)
         
         (titleLabelsContentView.frame, selectedTitleLabelsContentView.frame) = (bounds, bounds)
         
@@ -266,28 +267,31 @@ public class DGRunkeeperSwitch: UIControl {
         var leftTitleLabelSize = leftTitleLabel.sizeThatFits(CGSize(width: titleLabelMaxWidth, height: titleLabelMaxHeight))
         leftTitleLabelSize.width = min(leftTitleLabelSize.width, titleLabelMaxWidth)
         
-        let leftTitleLabelOrigin = CGPoint(x: floor((bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0), y: floor((bounds.height - leftTitleLabelSize.height) / 2.0))
+        let leftTitleLabelOrigin = CGPoint(x: floor((bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0), y: floor((bounds.height - leftTitleLabelSize.height) / 3.0) + 5)
         let leftTitleLabelFrame = CGRect(origin: leftTitleLabelOrigin, size: leftTitleLabelSize)
         (leftTitleLabel.frame, selectedLeftTitleLabel.frame) = (leftTitleLabelFrame, leftTitleLabelFrame)
         
         var centerTitleLabelSize = centerTitleLabel.sizeThatFits(CGSize(width: titleLabelMaxWidth, height: titleLabelMaxHeight))
         centerTitleLabelSize.width = min(centerTitleLabelSize.width, titleLabelMaxWidth)
         
-        let x1 = bounds.size.width / 3.0 + (bounds.width / 3.0 - centerTitleLabelSize.width) / 3.0
-        let x2 = bounds.size.width / 3.0 + (bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0
-        let x = x1 + x2
         
-        let centerTitleLabelOrigin = CGPoint(x: floor(x), y: floor((bounds.height - centerTitleLabelSize.height) / 2.0))
+        
+        let centerTitleLabelOrigin = CGPoint(x: floor(bounds.size.width / 3.0 + (bounds.width / 3.0 - centerTitleLabelSize.width) / 3.0), y: floor((bounds.height - centerTitleLabelSize.height) / 3.0) + 5)
         let centerTitleLabelFrame = CGRect(origin: centerTitleLabelOrigin, size: centerTitleLabelSize)
         (centerTitleLabel.frame, selectedCenterTitleLabel.frame) = (centerTitleLabelFrame, centerTitleLabelFrame)
+        
         
         var rightTitleLabelSize = rightTitleLabel.sizeThatFits(CGSize(width: titleLabelMaxWidth, height: titleLabelMaxHeight))
         rightTitleLabelSize.width = min(rightTitleLabelSize.width, titleLabelMaxWidth)
         
-        let rightTitleLabelOrigin = CGPoint(x: floor(bounds.size.width / 3.0 + (bounds.width / 3.0 - rightTitleLabelSize.width) / 3.0), y: floor((bounds.height - rightTitleLabelSize.height) / 2.0))
+        let x1 = bounds.size.width / 3.0 + (bounds.width / 3.0 - rightTitleLabelSize.width) / 3.0
+        let x2 = bounds.size.width / 3.0 + (bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0
+        
+        let x = x1 + x2 - 5
+        
+        let rightTitleLabelOrigin = CGPoint(x: floor(x), y: floor((bounds.height - rightTitleLabelSize.height) / 3.0) + 5)
         let rightTitleLabelFrame = CGRect(origin: rightTitleLabelOrigin, size: rightTitleLabelSize)
         (rightTitleLabel.frame, selectedRightTitleLabel.frame) = (rightTitleLabelFrame, rightTitleLabelFrame)
-        
         
     }
     
