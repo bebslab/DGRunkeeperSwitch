@@ -287,7 +287,7 @@ public class DGRunkeeperSwitch: UIControl {
         let x1 = bounds.size.width / 3.0 + (bounds.width / 3.0 - rightTitleLabelSize.width) / 3.0
         let x2 = bounds.size.width / 3.0 + (bounds.width / 3.0 - leftTitleLabelSize.width) / 3.0
         
-        let x = x1 + x2 - 5
+        let x = x1 + x2 - 4
         
         let rightTitleLabelOrigin = CGPoint(x: floor(x), y: floor((bounds.height - rightTitleLabelSize.height) / 3.0) + 5)
         let rightTitleLabelFrame = CGRect(origin: rightTitleLabelOrigin, size: rightTitleLabelSize)
