@@ -294,6 +294,28 @@ public class DGRunkeeperSwitch: UIControl {
         (rightTitleLabel.frame, selectedRightTitleLabel.frame) = (rightTitleLabelFrame, rightTitleLabelFrame)
         
     }
+    public func setSelectedIndexSwitch(selectedIndex: Int, animated: Bool) {
+        guard 0..<3 ~= selectedIndex else { return }
+        
+        // Reset switch on half pan gestures
+        var catchHalfSwitch:Bool = false
+        if self.selectedIndex == selectedIndex {
+            catchHalfSwitch = true
+        }
+        
+        self.selectedIndex = selectedIndex
+        if animated {
+            if (!catchHalfSwitch) {
+                self.sendActionsForControlEvents(.ValueChanged)
+            }
+            UIView.animateWithDuration(animationDuration, delay: 0.0, usingSpringWithDamping: animationSpringDamping, initialSpringVelocity: animationInitialSpringVelocity, options: [UIViewAnimationOptions.BeginFromCurrentState, UIViewAnimationOptions.CurveEaseOut], animations: { () -> Void in
+                self.layoutSubviews()
+                }, completion: nil)
+        } else {
+            layoutSubviews()
+            sendActionsForControlEvents(.ValueChanged)
+        }
+    }
     
 }
 
