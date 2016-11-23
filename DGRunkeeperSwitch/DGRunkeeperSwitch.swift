@@ -197,7 +197,7 @@ public class DGRunkeeperSwitch: UIControl {
         let location = gesture.locationInView(self)
         if location.x < bounds.width / 3.0 {
             setSelectedIndex(0, animated: true)
-        } else if location.x < bounds.width / 1.9 {
+        } else if location.x < bounds.width / 1.6 {
             setSelectedIndex(1, animated: true)
         } else {
             setSelectedIndex(2, animated: true)
