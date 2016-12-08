@@ -213,15 +213,11 @@ public class DGRunkeeperSwitch: UIControl {
             frame.origin.x = max(min(frame.origin.x, bounds.width - selectedBackgroundInset - frame.width), selectedBackgroundInset)
             selectedBackgroundView.frame = frame
         } else if gesture.state == .Ended || gesture.state == .Failed || gesture.state == .Cancelled {
-            let velocityX = gesture.velocityInView(self).x
-            if velocityX > 500.0 {
-                setSelectedIndex(1, animated: true)
-            } else if velocityX < -500.0 {
+            //let velocityX = gesture.velocityInView(self).x
+            if selectedBackgroundView.center.x >= bounds.width / 3.0 {
                 setSelectedIndex(0, animated: true)
-            } else if selectedBackgroundView.center.x >= bounds.width / 3.0 {
+            } else if selectedBackgroundView.center.x < bounds.size.width / 1.6 {
                 setSelectedIndex(1, animated: true)
-            } else if selectedBackgroundView.center.x < bounds.size.width / 2.0 {
-                setSelectedIndex(0, animated: true)
             } else {
                 setSelectedIndex(2, animated: true)
             }
