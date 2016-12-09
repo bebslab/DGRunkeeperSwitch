@@ -216,7 +216,7 @@ public class DGRunkeeperSwitch: UIControl {
             //let velocityX = gesture.velocityInView(self).x
             if selectedBackgroundView.center.x >= bounds.width / 3.0 {
                 setSelectedIndex(0, animated: true)
-            } else if selectedBackgroundView.center.x < bounds.size.width / 1.6 {
+            } else if selectedBackgroundView.center.x < bounds.size.width / 1.5 {
                 setSelectedIndex(1, animated: true)
             } else {
                 setSelectedIndex(2, animated: true)
